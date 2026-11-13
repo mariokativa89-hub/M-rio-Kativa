@@ -1,0 +1,185 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidAspectRatio(val) {
+      return val in ['9:16', '1:1', '16:9'];
+    }
+
+    function isValidTone(val) {
+      return val in ['Hook Viral', 'Educacional', 'Debate', 'Storytelling'];
+    }
+
+    function isValidCaptionStyle(val) {
+      return val in ['Karaokê', 'Minimalista', 'Alto Contraste'];
+    }
+
+    function isValidCaptionPosition(val) {
+      return val in ['Topo', 'Centro', 'Base'];
+    }
+
+    function isValidUserProfile(data) {
+      return data.userId is string &&
+             data.userId.size() >= 1 &&
+             data.userId.size() <= 128 &&
+             data.userId == request.auth.uid &&
+             data.displayName is string &&
+             data.displayName.size() >= 1 &&
+             data.displayName.size() <= 80 &&
+             isValidAspectRatio(data.defaultAspectRatio) &&
+             isValidTone(data.defaultTone) &&
+             isValidCaptionStyle(data.defaultCaptionStyle) &&
+             data.defaultDurationSec is int &&
+             data.defaultDurationSec >= 15 &&
+             data.defaultDurationSec <= 90;
+    }
+
+    function isValidClipProject(data) {
+      return data.userId is string &&
+             data.userId.size() >= 1 &&
+             data.userId.size() <= 128 &&
+             data.userId == request.auth.uid &&
+             data.sourceType in ['url', 'topic', 'video'] &&
+             data.sourceValue is string &&
+             data.sourceValue.size() >= 1 &&
+             data.sourceValue.size() <= 500 &&
+             data.title is string &&
+             data.title.size() >= 1 &&
+             data.title.size() <= 140 &&
+             data.hook is string &&
+             data.hook.size() >= 1 &&
+             data.hook.size() <= 240 &&
+             data.viralReason is string &&
+             data.viralReason.size() <= 500 &&
+             data.viralScore is int &&
+             data.viralScore >= 0 &&
+             data.viralScore <= 100 &&
+             data.startTimeSec is int &&
+             data.startTimeSec >= 0 &&
+             data.startTimeSec <= 86400 &&
+             data.endTimeSec is int &&
+             data.endTimeSec > data.startTimeSec &&
+             data.endTimeSec <= 86400 &&
+             isValidAspectRatio(data.aspectRatio) &&
+             isValidTone(data.tone) &&
+             isValidCaptionStyle(data.captionStyle) &&
+             isValidCaptionPosition(data.captionPosition) &&
+             data.themeIndex is int &&
+             data.themeIndex >= 0 &&
+             data.themeIndex <= 2 &&
+             data.transcript is list &&
+             data.transcript.size() >= 1 &&
+             data.transcript.size() <= 30 &&
+             data.transcript[0] is map &&
+             data.transcript[0].id is string &&
+             data.transcript[0].text is string &&
+             data.hashtags is list &&
+             data.hashtags.size() <= 10 &&
+             (data.hashtags.size() == 0 || data.hashtags[0] is string);
+    }
+
+    match /users/{userId} {
+      allow get: if isSignedIn() && request.auth.uid == userId && isValidId(userId);
+      allow list: if isSignedIn() && request.auth.uid == userId;
+
+      allow create: if isSignedIn() &&
+                       request.auth.uid == userId &&
+                       isValidId(userId) &&
+                       incoming().keys().hasAll([
+                         'userId', 'displayName', 'defaultAspectRatio',
+                         'defaultTone', 'defaultCaptionStyle', 'defaultDurationSec',
+                         'createdAt', 'updatedAt'
+                       ]) &&
+                       incoming().keys().hasOnly([
+                         'userId', 'displayName', 'defaultAspectRatio',
+                         'defaultTone', 'defaultCaptionStyle', 'defaultDurationSec',
+                         'createdAt', 'updatedAt'
+                       ]) &&
+                       isValidUserProfile(incoming()) &&
+                       incoming().createdAt is timestamp &&
+                       incoming().createdAt <= request.time &&
+                       incoming().updatedAt is timestamp &&
+                       incoming().updatedAt <= request.time;
+
+      allow update: if isSignedIn() &&
+                       request.auth.uid == userId &&
+                       isValidId(userId) &&
+                       isValidUserProfile(incoming()) &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().updatedAt is timestamp &&
+                       incoming().updatedAt <= request.time &&
+                       incoming().diff(existing()).affectedKeys().hasOnly([
+                         'displayName', 'defaultAspectRatio', 'defaultTone',
+                         'defaultCaptionStyle', 'defaultDurationSec', 'updatedAt'
+                       ]);
+
+      allow delete: if isSignedIn() && request.auth.uid == userId && isValidId(userId);
+
+      match /clips/{clipId} {
+        allow list: if isSignedIn() && request.auth.uid == userId;
+        allow get: if isSignedIn() && request.auth.uid == userId && isValidId(clipId);
+
+        allow create: if isSignedIn() &&
+                         request.auth.uid == userId &&
+                         isValidId(userId) &&
+                         isValidId(clipId) &&
+                         incoming().keys().hasAll([
+                           'userId', 'sourceType', 'sourceValue', 'title', 'hook',
+                           'viralReason', 'viralScore', 'startTimeSec', 'endTimeSec',
+                           'aspectRatio', 'tone', 'captionStyle', 'captionPosition',
+                           'themeIndex', 'transcript', 'hashtags', 'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'userId', 'sourceType', 'sourceValue', 'title', 'hook',
+                           'viralReason', 'viralScore', 'startTimeSec', 'endTimeSec',
+                           'aspectRatio', 'tone', 'captionStyle', 'captionPosition',
+                           'themeIndex', 'transcript', 'hashtags', 'createdAt', 'updatedAt'
+                         ]) &&
+                         isValidClipProject(incoming()) &&
+                         incoming().createdAt is timestamp &&
+                         incoming().createdAt <= request.time &&
+                         incoming().updatedAt is timestamp &&
+                         incoming().updatedAt <= request.time;
+
+        allow update: if isSignedIn() &&
+                         request.auth.uid == userId &&
+                         isValidId(userId) &&
+                         isValidId(clipId) &&
+                         isValidClipProject(incoming()) &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().updatedAt is timestamp &&
+                         incoming().updatedAt <= request.time &&
+                         incoming().diff(existing()).affectedKeys().hasOnly([
+                           'title', 'hook', 'startTimeSec', 'endTimeSec',
+                           'aspectRatio', 'captionStyle', 'captionPosition',
+                           'transcript', 'hashtags', 'updatedAt'
+                         ]);
+
+        allow delete: if isSignedIn() && request.auth.uid == userId && isValidId(clipId);
+      }
+    }
+  }
+}

@@ -1,3 +1,75 @@
 <resources>
     <string name="app_name">Encurtador Webb</string>
+
+    <!-- Brand & Header -->
+    <string name="badge_ai_studio">IA Studio</string>
+    <string name="cd_brand_logo">Logotipo Encurtador Webb</string>
+    <string name="cd_hero_banner">Estúdio de edição de cortes virais</string>
+    <string name="cd_creator_avatar">Avatar do criador</string>
+
+    <!-- Auth Screen -->
+    <string name="auth_studio_subtitle">Estúdio de Cortes Virais</string>
+    <string name="auth_headline">Cortes virais em segundos</string>
+    <string name="auth_description">Cole um link, descreva seu tema ou selecione um vídeo. O Gemini identifica os melhores ganchos e gera legendas prontas.</string>
+    <string name="auth_feature_1_title">Detecção de Ganchos &amp; Viral Score</string>
+    <string name="auth_feature_1_desc">Análise automática de retenção com pontuação de 0 a 100.</string>
+    <string name="auth_feature_2_title">Legendas Editáveis &amp; Mini-Editor</string>
+    <string name="auth_feature_2_desc">Ajuste cortes, posição da legenda e sincronize na nuvem.</string>
+    <string name="auth_sign_in_google">Entrar com Google</string>
+    <string name="auth_signing_in">Conectando…</string>
+    <string name="auth_cancelled_hint">Login cancelado. Selecione uma conta Google para continuar.</string>
+
+    <!-- Navigation -->
+    <string name="nav_create">Criar</string>
+    <string name="nav_projects">Projetos</string>
+    <string name="nav_profile">Perfil</string>
+
+    <!-- Create Screen -->
+    <string name="create_title">Novo Corte Viral</string>
+    <string name="create_subtitle">Escolha a origem do vídeo e ajuste o estilo do corte</string>
+    <string name="source_tab_url">Link / Tema</string>
+    <string name="source_tab_video">Vídeo Local</string>
+    <string name="source_input_label">URL do YouTube, Podcast ou Tema do Vídeo</string>
+    <string name="source_input_placeholder">Ex.: Podcast sobre produtividade e hábitos com foco em IA…</string>
+    <string name="pick_video_button">Selecionar vídeo da galeria</string>
+    <string name="change_video_button">Trocar vídeo</string>
+    <string name="quick_ideas_label">Ideias rápidas:</string>
+    <string name="format_label">Formato</string>
+    <string name="duration_label">Duração alvo</string>
+    <string name="tone_label">Estilo de Gancho</string>
+    <string name="caption_style_label">Estilo de Legenda</string>
+    <string name="generate_cta">Gerar 3 Cortes Virais</string>
+
+    <!-- Processing Screen -->
+    <string name="processing_title">Processando com IA</string>
+    <string name="processing_subtitle">Analisando ganchos, ritmo e potencial de retenção…</string>
+    <string name="processing_error_title">Falha ao gerar cortes</string>
+    <string name="retry_button">Tentar novamente</string>
+    <string name="back_to_form">Voltar</string>
+
+    <!-- Results & Editor -->
+    <string name="results_title">3 Cortes Prontos</string>
+    <string name="results_new_video">Novo Vídeo</string>
+    <string name="open_mini_editor">Mini-Editor</string>
+    <string name="copy_script">Copiar Roteiro</string>
+    <string name="share_clip">Compartilhar</string>
+    <string name="editor_title">Mini-Editor de Corte</string>
+    <string name="editor_save">Salvar Alterações</string>
+    <string name="editor_close">Fechar</string>
+
+    <!-- Projects Tab -->
+    <string name="projects_title">Meus Projetos</string>
+    <string name="projects_search_hint">Buscar cortes por título ou tema…</string>
+    <string name="projects_empty_title">Nenhum corte salvo ainda</string>
+    <string name="projects_empty_desc">Crie sua primeira leva de cortes virais na aba Criar para vê-los sincronizados aqui.</string>
+    <string name="projects_go_create">Criar Primeiro Corte</string>
+
+    <!-- Profile Tab -->
+    <string name="profile_title">Perfil do Criador</string>
+    <string name="profile_stats_clips">Cortes</string>
+    <string name="profile_stats_avg_score">Score Médio</string>
+    <string name="profile_stats_top_score">Maior Score</string>
+    <string name="profile_defaults_title">Preferências Padrão</string>
+    <string name="profile_save_prefs">Salvar Preferências</string>
+    <string name="profile_sign_out">Sair da Conta</string>
 </resources>

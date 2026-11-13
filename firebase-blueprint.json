@@ -1,0 +1,170 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Creator preferences and profile metadata for Encurtador Webb.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated Firebase UID matching the document path."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Creator display name."
+        },
+        "defaultAspectRatio": {
+          "type": "string",
+          "enum": ["9:16", "1:1", "16:9"]
+        },
+        "defaultTone": {
+          "type": "string",
+          "enum": ["Hook Viral", "Educacional", "Debate", "Storytelling"]
+        },
+        "defaultCaptionStyle": {
+          "type": "string",
+          "enum": ["Karaokê", "Minimalista", "Alto Contraste"]
+        },
+        "defaultDurationSec": {
+          "type": "integer",
+          "description": "Preferred target clip length in seconds."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp written with FieldValue.serverTimestamp()."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp written with FieldValue.serverTimestamp()."
+        }
+      },
+      "required": [
+        "userId",
+        "displayName",
+        "defaultAspectRatio",
+        "defaultTone",
+        "defaultCaptionStyle",
+        "defaultDurationSec",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ClipProject": {
+      "title": "ClipProject",
+      "description": "AI-generated short-form viral video clip project with editable transcript segments and styling.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Owner Firebase UID."
+        },
+        "sourceType": {
+          "type": "string",
+          "enum": ["url", "topic", "video"]
+        },
+        "sourceValue": {
+          "type": "string",
+          "description": "Source video URL, topic description, or local file label."
+        },
+        "title": {
+          "type": "string",
+          "description": "Catchy short-form clip title."
+        },
+        "hook": {
+          "type": "string",
+          "description": "Opening 3-second viral hook."
+        },
+        "viralReason": {
+          "type": "string",
+          "description": "AI analysis explaining why this cut has viral potential."
+        },
+        "viralScore": {
+          "type": "integer",
+          "description": "Score from 0 to 100."
+        },
+        "startTimeSec": {
+          "type": "integer",
+          "description": "Cut start time in seconds."
+        },
+        "endTimeSec": {
+          "type": "integer",
+          "description": "Cut end time in seconds."
+        },
+        "aspectRatio": {
+          "type": "string",
+          "enum": ["9:16", "1:1", "16:9"]
+        },
+        "tone": {
+          "type": "string",
+          "enum": ["Hook Viral", "Educacional", "Debate", "Storytelling"]
+        },
+        "captionStyle": {
+          "type": "string",
+          "enum": ["Karaokê", "Minimalista", "Alto Contraste"]
+        },
+        "captionPosition": {
+          "type": "string",
+          "enum": ["Topo", "Centro", "Base"]
+        },
+        "themeIndex": {
+          "type": "integer",
+          "description": "Visual card theme variant index (0..2)."
+        },
+        "transcript": {
+          "type": "array",
+          "description": "Ordered list of editable subtitle segments."
+        },
+        "hashtags": {
+          "type": "array",
+          "description": "Recommended hashtags for publishing."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp written with FieldValue.serverTimestamp()."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp written with FieldValue.serverTimestamp()."
+        }
+      },
+      "required": [
+        "userId",
+        "sourceType",
+        "sourceValue",
+        "title",
+        "hook",
+        "viralReason",
+        "viralScore",
+        "startTimeSec",
+        "endTimeSec",
+        "aspectRatio",
+        "tone",
+        "captionStyle",
+        "captionPosition",
+        "themeIndex",
+        "transcript",
+        "hashtags",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Authenticated user profile and default studio preferences."
+    },
+    "/users/{userId}/clips/{clipId}": {
+      "schema": {
+        "$ref": "#/entities/ClipProject"
+      },
+      "description": "User-owned generated viral clip projects."
+    }
+  }
+}
