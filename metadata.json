@@ -1,0 +1,6 @@
+{
+  "name": "Encurtador Webb",
+  "description": "Transforme vídeos longos em cortes virais curtos com IA, legendas editáveis e pontuação de engajamento.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
